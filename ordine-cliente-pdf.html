@@ -10,15 +10,14 @@ body{font-family:Helvetica,Arial,sans-serif;color:#1B2A4A;font-size:8pt;backgrou
 .page{width:297mm;min-height:210mm;background:#fff;margin:0 auto;position:relative;padding-bottom:16mm}
 .header{background:#1B2A4A;padding:10px 15mm;display:flex;align-items:center;justify-content:space-between}
 .header-left{display:flex;align-items:center;gap:12px}
-.logo-box{height:40px;background:#fff;display:flex;align-items:center;padding:3px 6px;border-radius:4px}
-.logo-box img{height:34px;object-fit:contain}
-.company-name{color:#fff;font-size:14pt;font-weight:700}
+.logo-img{width:44px;height:44px;border-radius:50%;background:#fff;padding:2px}
+.company-name{color:#fff;font-size:15pt;font-weight:700}
 .company-sub{color:#D6246E;font-size:8pt;font-weight:600}
 .company-desc{color:#8899aa;font-size:6.5pt;margin-top:2px}
 .badge{background:#D6246E;color:#fff;border-radius:6px;padding:6px 14px;text-align:center}
 .badge-label{font-size:6pt;color:#FFB0CC;font-weight:700}
 .badge-num{font-size:13pt;font-weight:700}
-.meta-row{padding:8px 15mm 0;display:flex;gap:18px;flex-wrap:wrap}
+.meta-row{padding:8px 15mm 0;display:flex;gap:16px;flex-wrap:wrap}
 .meta-item .label{font-size:6.5pt;color:#6B7B8D;text-transform:uppercase;letter-spacing:.4px}
 .meta-item .value{font-size:8pt;font-weight:700;margin-top:1px}
 .two-cols{margin:8px 15mm 0;display:flex;gap:10px}
@@ -28,31 +27,22 @@ body{font-family:Helvetica,Arial,sans-serif;color:#1B2A4A;font-size:8pt;backgrou
 .box-label{font-size:6.5pt;color:#6B7B8D;text-transform:uppercase;letter-spacing:.4px}
 .box-value{font-size:9pt;font-weight:700;margin-top:2px}
 .box-sub{font-size:7pt;color:#6B7B8D;margin-top:1px}
-.box-line{font-size:7pt;margin-top:1px}
 .section{padding:8px 15mm 0}
 .section-title{font-size:8pt;font-weight:700;display:inline-block;border-bottom:2px solid #D6246E;padding-bottom:2px;margin-bottom:6px}
 .dot{display:inline-block;width:5px;height:5px;background:#D6246E;border-radius:50%;margin-right:5px;vertical-align:middle}
 table{width:100%;border-collapse:collapse;margin-top:3px}
-thead th{background:#1B2A4A;color:#fff;font-size:6pt;padding:4px 5px;text-align:center;font-weight:700}
-thead th:nth-child(2){text-align:left}
-thead th:nth-child(3){text-align:left}
-tbody td{padding:3px 5px;font-size:7pt;border-bottom:1px solid #D0D8E0;text-align:right}
-tbody td:nth-child(2){text-align:left}
-tbody td:nth-child(3){text-align:left}
+thead th{background:#1B2A4A;color:#fff;font-size:6.5pt;padding:5px 8px;text-align:left;font-weight:700}
+thead th.ctr{text-align:center}
+thead th.rgt{text-align:right}
+tbody td{padding:4px 8px;font-size:7.5pt;border-bottom:1px solid #D0D8E0;text-align:left}
+tbody td.ctr{text-align:center}
+tbody td.rgt{text-align:right}
 tbody tr:nth-child(even){background:#F0F4F8}
-.total-row{background:#E8DCF0!important;font-weight:700}
-.total-row td{border-top:2px solid #D6246E;font-size:7.5pt}
-.totals{text-align:right;padding:6px 15mm 0}
-.totals-line{font-size:8pt;margin-bottom:2px}
-.totals-line .lbl{color:#6B7B8D;margin-right:12px}
-.grand-total{background:#1B2A4A;color:#fff;border-radius:5px;padding:6px 14px;display:inline-block;margin-top:4px;text-align:center}
-.grand-total .lbl{font-size:6.5pt;color:#8899aa;font-weight:700}
-.grand-total .val{font-size:12pt;font-weight:700;margin-top:1px}
 .notes li{font-size:6.5pt;line-height:1.7;list-style:none}
 .notes li:before{content:"\2022";color:#D6246E;margin-right:6px;font-weight:700}
-.signatures{padding:12px 15mm 0;display:flex;justify-content:space-between}
+.signatures{padding:14px 15mm 0;display:flex;justify-content:space-between}
 .sig-box{width:42%}.sig-box .lbl{font-size:6.5pt;color:#6B7B8D}
-.sig-line{border-top:1px solid #D0D8E0;margin-top:22px;padding-top:2px;font-size:6pt;color:#6B7B8D}
+.sig-line{border-top:1px solid #D0D8E0;margin-top:24px;padding-top:2px;font-size:6pt;color:#6B7B8D}
 .footer{position:absolute;bottom:0;left:0;right:0}
 .footer-line{border-top:2px solid #D6246E;margin:0 15mm}
 .footer-text{text-align:center;padding:3px 0;font-size:5.5pt;color:#6B7B8D}
@@ -67,30 +57,39 @@ tbody tr:nth-child(even){background:#F0F4F8}
 <body>
 <div id="app"><div style="text-align:center;padding:60px;color:#6B7B8D">Caricamento...</div></div>
 <script>
-var LOGO='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCAyMDAgNjAiPjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iNjAiIHJ4PSI4IiBmaWxsPSIjMUIyQTRBIi8+PHRleHQgeD0iMTAwIiB5PSIyOCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iI2ZmZiIgZm9udC1mYW1pbHk9IkhlbHZldGljYSxBcmlhbCIgZm9udC1zaXplPSIxNiIgZm9udC13ZWlnaHQ9IjcwMCI+TVlDUk9DTEVBTjwvdGV4dD48dGV4dCB4PSIxMDAiIHk9IjQ2IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjRDYyNDZFIiBmb250LWZhbWlseT0iSGVsdmV0aWNhLEFyaWFsIiBmb250LXNpemU9IjEwIiBmb250LXdlaWdodD0iNjAwIj5JVEFMSUHCrjwvdGV4dD48L3N2Zz4=';
+var LOGO='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDQ4IDQ4Ij48Y2lyY2xlIGN4PSIyNCIgY3k9IjI0IiByPSIyMyIgZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjMUIyQTRBIiBzdHJva2Utd2lkdGg9IjIiLz48dGV4dCB4PSIyNCIgeT0iMzEiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMxQjJBNEEiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2EsQXJpYWwiIGZvbnQtc2l6ZT0iMjQiIGZvbnQtd2VpZ2h0PSI3MDAiPk08L3RleHQ+PC9zdmc+';
 var params=new URLSearchParams(window.location.search);
 var dp=params.get('data');var o=null;
 if(dp){try{o=JSON.parse(decodeURIComponent(dp))}catch(e){try{o=JSON.parse(dp)}catch(e2){}}}
-if(!o){document.getElementById('app').innerHTML='<div class="controls" style="min-height:100vh;display:flex;align-items:center;justify-content:center"><div style="max-width:500px;text-align:center"><img src="'+LOGO+'" style="height:40px;margin-bottom:14px"><h2 style="color:#1B2A4A;margin-bottom:8px">Ordine Cliente PDF</h2><p style="color:#6B7B8D;margin-bottom:14px;font-size:13px">Incolla il JSON:</p><textarea id="ji" style="width:100%;height:200px;border:2px solid #D0D8E0;border-radius:8px;padding:10px;font-size:11px;font-family:monospace;resize:vertical"></textarea><br><button class="btn" style="margin-top:10px" onclick="loadJ()">Carica</button></div></div>'}else{render(o);if(params.get('print')==='1')setTimeout(function(){window.print()},600)}
+if(!o){document.getElementById('app').innerHTML='<div class="controls" style="min-height:100vh;display:flex;align-items:center;justify-content:center"><div style="text-align:center"><h2 style="color:#1B2A4A;margin-bottom:8px">Mycroclean \u2014 Ordine Cliente</h2><p style="color:#6B7B8D;margin-bottom:14px;font-size:13px">Incolla il JSON:</p><textarea id="ji" style="width:400px;height:200px;border:2px solid #D0D8E0;border-radius:8px;padding:10px;font-size:11px;font-family:monospace;resize:vertical"></textarea><br><button class="btn" style="margin-top:10px" onclick="loadJ()">Carica</button></div></div>'}else{render(o);if(params.get('print')==='1')setTimeout(function(){window.print()},600)}
 function loadJ(){try{o=JSON.parse(document.getElementById('ji').value);render(o)}catch(e){alert('JSON non valido')}}
 function fD(d){if(!d)return'\u2014';try{return new Date(d).toLocaleDateString('it-IT',{day:'2-digit',month:'2-digit',year:'numeric'})}catch(e){return String(d)}}
-function fC(v){var n=parseFloat(v);if(isNaN(n)||n===0)return'\u2014';return new Intl.NumberFormat('it-IT',{style:'currency',currency:'EUR'}).format(n)}
 function render(o){
-var righe=o.righe||[];var gT=0;var rH='';
-righe.forEach(function(r,i){var q=r.quantita||0,p=r.prezzo||0,sc=r.sconto||0;var imp=r.importo||(q*p*(1-sc/100));gT+=imp;
-rH+='<tr><td style="text-align:center">'+(i+1)+'</td><td>'+(r.codice||'')+'</td><td>'+(r.descrizione||'')+'</td><td>'+(r.colore||'')+'</td><td>'+(r.taglia||'')+'</td><td class="tr">'+(q||'')+'</td><td class="tr">'+fC(p)+'</td><td class="tr">'+(sc?sc+'%':'')+'</td><td class="tr" style="font-weight:700">'+fC(imp)+'</td></tr>'});
-var iv=parseFloat(o.iva)||22,iA=gT*iv/100,tI=gT*(1+iv/100);
+var righe=o.righe||[];var rH='';var totQty=0;
+righe.forEach(function(r,i){
+var q=r.quantita||0;totQty+=q;
+rH+='<tr>'+
+'<td class="ctr">'+(i+1)+'</td>'+
+'<td>'+(r.codice||'')+'</td>'+
+'<td>'+(r.descrizione||'')+'</td>'+
+'<td class="ctr">'+(r.colore||'')+'</td>'+
+'<td class="ctr">'+(r.taglia||'')+'</td>'+
+'<td class="rgt">'+(q||'')+'</td>'+
+'<td class="rgt">'+(r.qty_evasa||'')+'</td>'+
+'<td class="rgt">'+(r.qty_da_evadere||'')+'</td>'+
+'<td>'+(r.note||'')+'</td>'+
+'</tr>'});
+rH+='<tr style="background:#E8DCF0;font-weight:700"><td colspan="5" style="border-top:2px solid #D6246E"></td><td style="border-top:2px solid #D6246E;text-align:right">'+totQty+'</td><td colspan="3" style="border-top:2px solid #D6246E"></td></tr>';
 var nH='';var nt=o.note||'';if(nt){nt.split('\n').forEach(function(l){if(l.trim())nH+='<li>'+l.trim()+'</li>'})}
 document.getElementById('app').innerHTML=
 '<div class="controls"><button class="btn" onclick="window.print()">\ud83d\udda8\ufe0f Stampa / Salva PDF</button> <button class="btn" onclick="history.back()">\u2190 Torna</button></div>'+
 '<div class="page">'+
-'<div class="header"><div class="header-left"><div class="logo-box"><img src="'+LOGO+'"></div><div><div class="company-name">MYCROCLEAN</div><div class="company-sub">ITALIA\u00ae</div><div class="company-desc">Conferma Ordine Cliente</div></div></div><div class="badge"><div class="badge-label">ORDINE N\u00b0</div><div class="badge-num">'+(o.numero||'')+'</div></div></div>'+
+'<div class="header"><div class="header-left"><img class="logo-img" src="'+LOGO+'"><div><div class="company-name">MYCROCLEAN</div><div class="company-sub">ITALIA\u00ae</div><div class="company-desc">Conferma Ordine Cliente</div></div></div><div class="badge"><div class="badge-label">ORDINE N\u00b0</div><div class="badge-num">'+(o.numero||'')+'</div></div></div>'+
 '<div class="meta-row"><div class="meta-item"><div class="label">DATA ORDINE</div><div class="value">'+fD(o.data)+'</div></div><div class="meta-item"><div class="label">CODICE ORDINE</div><div class="value">'+(o.codice_ordine||'')+'</div></div><div class="meta-item"><div class="label">STATO</div><div class="value">'+(o.stato||'')+'</div></div><div class="meta-item"><div class="label">CONSEGNA PREVISTA</div><div class="value">'+fD(o.data_consegna)+'</div></div>'+(o.lotto?'<div class="meta-item"><div class="label">LOTTO</div><div class="value">'+o.lotto+'</div></div>':'')+(o.codice_texo?'<div class="meta-item"><div class="label">COD. TEXO</div><div class="value">'+o.codice_texo+'</div></div>':'')+'</div>'+
-'<div class="two-cols"><div class="box box-cli"><div class="box-label">CLIENTE</div><div class="box-value">'+(o.cliente||'\u2014')+'</div>'+(o.indirizzo_cliente?'<div class="box-sub">'+o.indirizzo_cliente+'</div>':'')+(o.telefono_cliente?'<div class="box-sub">\u260e '+o.telefono_cliente+'</div>':'')+(o.email_cliente?'<div class="box-sub">\u2709 '+o.email_cliente+'</div>':'')+(o.piva_cliente?'<div class="box-sub">P.IVA: '+o.piva_cliente+'</div>':'')+'</div><div class="box box-ord"><div class="box-label">DETTAGLI ORDINE</div><div class="box-value">'+(o.ordine_cliente||'Mycroclean Italia\u00ae')+'</div>'+(o.note_cliente?'<div class="box-sub">'+o.note_cliente+'</div>':'')+'</div></div>'+
+'<div class="two-cols"><div class="box box-cli"><div class="box-label">CLIENTE</div><div class="box-value">'+(o.cliente||'\u2014')+'</div>'+(o.indirizzo_cliente?'<div class="box-sub">'+o.indirizzo_cliente+'</div>':'')+(o.telefono_cliente?'<div class="box-sub">\u260e '+o.telefono_cliente+'</div>':'')+(o.email_cliente?'<div class="box-sub">\u2709 '+o.email_cliente+'</div>':'')+(o.piva_cliente?'<div class="box-sub">P.IVA: '+o.piva_cliente+'</div>':'')+'</div><div class="box box-ord"><div class="box-label">RIF. ORDINE CLIENTE</div><div class="box-value">'+(o.ordine_cliente||'\u2014')+'</div>'+(o.note_cliente?'<div class="box-sub">'+o.note_cliente+'</div>':'')+'</div></div>'+
 (o.corpo?'<div class="section"><div class="dot"></div><span style="font-size:6.5pt;color:#6B7B8D;text-transform:uppercase">CONDIZIONI</span><div style="font-size:7pt;line-height:1.5;margin-top:3px;white-space:pre-line">'+o.corpo+'</div></div>':'')+
-'<div class="section"><table><thead><tr><th>#</th><th>Codice</th><th>Descrizione</th><th>Colore</th><th>Taglia</th><th>Qt\u00e0</th><th>Prezzo unit.</th><th>Sconto</th><th>Importo</th></tr></thead><tbody>'+rH+'<tr class="total-row"><td colspan="7"></td><td>TOTALE</td><td>'+fC(gT)+'</td></tr></tbody></table></div>'+
-'<div class="totals"><div class="totals-line"><span class="lbl">Imponibile</span><span>'+fC(gT)+'</span></div><div class="totals-line"><span class="lbl">IVA ('+iv+'%)</span><span>'+fC(iA)+'</span></div><div class="grand-total"><div class="lbl">TOTALE ORDINE</div><div class="val">'+fC(tI)+'</div></div></div>'+
-(nH?'<div class="section"><div class="dot"></div><span class="section-title">NOTE</span><ul class="notes">'+nH+'</ul></div>':'')+
+'<div class="section"><div class="dot"></div><span class="section-title">RIGHE ORDINE</span><table><thead><tr><th class="ctr">#</th><th>Codice</th><th>Descrizione</th><th class="ctr">Colore</th><th class="ctr">Taglia</th><th class="rgt">Qt\u00e0</th><th class="rgt">Evasa</th><th class="rgt">Da Evadere</th><th>Note</th></tr></thead><tbody>'+rH+'</tbody></table></div>'+
+(nH?'<div class="section"><div class="dot"></div><span class="section-title">NOTE ORDINE</span><ul class="notes">'+nH+'</ul></div>':'')+
 '<div class="signatures"><div class="sig-box"><div class="lbl">Mycroclean Italia\u00ae</div><div class="sig-line">Firma e timbro</div></div><div class="sig-box"><div class="lbl">Cliente per accettazione</div><div class="sig-line">Firma e timbro</div></div></div>'+
 '<div class="footer"><div class="footer-line"></div><div class="footer-text">Mycroclean Italia\u00ae | Tel. 02 95300368 | info@mycroclean.it | Indumenti Clean Room</div><div class="footer-bar">MYCROCLEAN ITALIA\u00ae</div></div></div>'}
 </script>
