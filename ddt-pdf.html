@@ -88,8 +88,9 @@ async function atOne(tbl,id,fields){
 
 async function loadDDT(n){
   var recs=await atFetch(T_DDT,Object.values(F_DDT),"{"+F_DDT.nddt+"}="+n);
-  if(!recs.length) throw new Error("DDT n. "+n+" non trovato");
-  var rec=recs[0],df=rec.cellValuesByFieldId;
+  if(!recs.length) throw new Error("DDT n. "+n+" non trovato in Airtable");
+  if(!recs[0].cellValuesByFieldId) throw new Error("Record DDT vuoto o malformato");
+  var rec=recs[0],df=rec.cellValuesByFieldId||{};
   var righIds=df[F_DDT.righe]||[];
   var righe=[];
   for(var i=0;i<righIds.length;i++){
@@ -177,7 +178,7 @@ async function loadNum(){
 
 // compatibilita vecchio sistema b= e data=
 function fromB64(s){s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';try{var b=atob(s);var u=new Uint8Array(b.length);for(var i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return new TextDecoder('utf-8').decode(u);}catch(e){return null;}}
-function expandData(o){if(!o)return null;var r=(o.r||[]).map(function(r){return{codice:r.c||'',descrizione:r.d||'',udm:r.u||'pz',quantita:r.q||0,rientrata:r.r||'',in_lab:r.l!==undefined?r.l:'',note:r.n||''};});return{numero_ddt:o.n||'',data:o.d||'',stato:o.s||'',trasporto:o.t||'',colli:o.nc||'',aspetto:o.ac||'',peso:o.p||'',destinatario:o.ds||'',indirizzo_dest:o.id||'',email_dest:o.ed||'',piva_dest:o.pv||'',causale:o.ca||'Vendita',righe:r};}
+function expandData(o){if(!o)return null;var righe=(o.r||[]).map(function(row){return{codice:row.c||'',descrizione:row.d||'',udm:row.u||'pz',quantita:row.q||0,rientrata:row.r||'',in_lab:row.l!==undefined?row.l:'',note:row.n||''};});return{numero_ddt:o.n||'',data:o.d||'',stato:o.s||'',trasporto:o.t||'',colli:o.nc||'',aspetto:o.ac||'',peso:o.p||'',destinatario:o.ds||'',indirizzo_dest:o.id||'',email_dest:o.ed||'',piva_dest:o.pv||'',causale:o.ca||'Vendita',righe:righe};}
 
 (async function(){
   var p=new URLSearchParams(window.location.search);
