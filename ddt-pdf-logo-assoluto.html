@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Mycroclean Italia® - DDT</title>
+<style>
+@page{size:A4;margin:0}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Helvetica,Arial,sans-serif;color:#1B2A4A;font-size:9pt;background:#f0f4f8}
+.page{width:210mm;min-height:297mm;background:#fff;margin:0 auto;position:relative;padding-bottom:20mm}
+.header{background:#1B2A4A;padding:14px 20mm;display:flex;align-items:center;justify-content:space-between}
+.header-left{display:flex;align-items:center;gap:14px}
+.logo-img{width:48px;height:48px;border-radius:50%;background:#fff;padding:3px;object-fit:contain}
+.company-name{color:#fff;font-size:18pt;font-weight:700}
+.company-sub{color:#fff;font-size:9pt}
+.company-desc{color:#8899aa;font-size:7pt;margin-top:3px}
+.badge{background:#D6246E;color:#fff;border-radius:6px;padding:8px 16px;text-align:center}
+.badge-label{font-size:7pt;color:#FFB0CC;font-weight:700}
+.badge-num{font-size:14pt;font-weight:700}
+.meta-row{padding:10px 20mm 0;display:flex;gap:20px;flex-wrap:wrap}
+.meta-item .label{font-size:7pt;color:#6B7B8D;text-transform:uppercase;letter-spacing:.4px}
+.meta-item .value{font-size:9pt;font-weight:700;margin-top:2px}
+.three-cols{margin:10px 20mm 0;display:flex;gap:10px}
+.box{flex:1;background:#F0F4F8;border-radius:6px;padding:10px 14px}
+.box-mitt{border-left:3px solid #1B2A4A}
+.box-dest{border-left:3px solid #D6246E}
+.box-trasp{border-left:3px solid #8899aa}
+.box-label{font-size:7pt;color:#6B7B8D;text-transform:uppercase;letter-spacing:.4px}
+.box-value{font-size:10pt;font-weight:700;margin-top:3px}
+.box-sub{font-size:7.5pt;color:#6B7B8D;margin-top:2px}
+.section{padding:10px 20mm 0}
+.section-title{font-size:9pt;font-weight:700;display:inline-block;border-bottom:2px solid #D6246E;padding-bottom:2px;margin-bottom:8px}
+.dot{display:inline-block;width:6px;height:6px;background:#D6246E;border-radius:50%;margin-right:6px;vertical-align:middle}
+table{width:100%;border-collapse:collapse;margin-top:4px}
+thead th{background:#1B2A4A;color:#fff;font-size:6.5pt;padding:5px 6px;text-align:left;font-weight:700}
+thead th.ctr{text-align:center}thead th.rgt{text-align:right}
+tbody td{padding:4px 6px;font-size:7.5pt;border-bottom:1px solid #D0D8E0;text-align:left}
+tbody td.ctr{text-align:center}tbody td.rgt{text-align:right}
+tbody tr:nth-child(even){background:#F0F4F8}
+.total-row{background:#E8DCF0!important;font-weight:700}
+.total-row td{border-top:2px solid #D6246E}
+.signatures{padding:16px 20mm 0;display:flex;justify-content:space-between;gap:12px}
+.sig-box{flex:1}.sig-box .lbl{font-size:7pt;color:#6B7B8D}
+.sig-line{border-top:1px solid #D0D8E0;margin-top:28px;padding-top:3px;font-size:6.5pt;color:#6B7B8D}
+.footer{position:absolute;bottom:0;left:0;right:0}
+.footer-line{border-top:2px solid #D6246E;margin:0 20mm}
+.footer-text{text-align:center;padding:4px 0;font-size:6pt;color:#6B7B8D}
+.footer-bar{background:#1B2A4A;padding:3px;text-align:center;color:#fff;font-size:5pt;font-weight:700;letter-spacing:2px}
+.controls{text-align:center;padding:16px;background:#f0f4f8}
+.btn{padding:12px 36px;background:#1B2A4A;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;margin:4px}
+.btn:hover{background:#0f1a30}
+.spin-wrap{text-align:center;padding:60px;color:#6B7B8D}
+.spinner{display:inline-block;width:36px;height:36px;border:3px solid #D0D8E0;border-top-color:#D6246E;border-radius:50%;animation:spin .7s linear infinite;margin-bottom:12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.error-box{text-align:center;padding:60px;color:#D6246E}
+@media print{.controls{display:none}.page{margin:0}body{background:#fff}*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important}}
+</style>
+</head>
+<body>
+<div id="app"><div class="spin-wrap"><div class="spinner"></div><p>Caricamento...</p></div></div>
+<script>
+var LOGO="https://milenaba71.github.io/stampaceo/logo%20mycroclean.png";
+var TOKEN="patHaG3tWDF442SEh.b07012b174f67c5e2e9e908259f4abecd755fda59b62f9efc6c4fb81489fb8ff";
+var BASE="appfq4D7MKC9YxUZi";
+var T_DDT="tblmFIb5aTD0T6wS5";
+var T_RIGHE="tblstbnacxeJi4Qv2";
+var T_MAG="tbl1hiVWAlnldLAC7";
+var F_DDT={nddt:"fldgUBDxX6mWjaEaf",data:"fldcMAWKedobKCZHT",status:"fldFMklyDXKU7rwKj",trasporto:"fldYod3rV9G7GY3nz",causale:"fldHVtrfFlRjU07Ci",colli:"fldCIfQgXlxk5QQnr",aspetto:"fld9QRC5Qc7kNJM1X",peso:"fldDPUjoNwTEOWYHS",dest_nome:"fld8KfNrFJrBb5gmY",dest_ind:"fldHYrxqZqqsDS4qb",dest_mail:"fldnA0WaBMOyLWjHf",dest_piva:"fldyLvanubjjiRCZT",righe:"fldkw43AsVLp3bSU4"};
+var F_RIGA={mag:"fldTXN7Z7oxz1YNLZ",desc:"fld8puXt5jZv8eGpZ",qty:"fldUVOnsnflDUNZSg",udm:"fldqBEHEFuumn0RvE",note:"fldYgnaNwNTrJvUVZ",rientrata:"fldajPNUHTjclaCOB",in_lab:"fldHwVUgnx8F0DELn"};
+function fD(d){if(!d)return"-";try{return new Date(d).toLocaleDateString("it-IT",{day:"2-digit",month:"2-digit",year:"numeric"});}catch(e){return String(d);}}
+async function atFetch(tbl,fields,filter){
+var all=[],off=null,fp=fields.map(function(f){return"fields[]="+encodeURIComponent(f);}).join("&"),fi=filter?"&filterByFormula="+encodeURIComponent(filter):"";
+do{var r=await fetch("https://api.airtable.com/v0/"+BASE+"/"+encodeURIComponent(tbl)+"?"+fp+fi+(off?"&offset="+off:""),{headers:{Authorization:"Bearer "+TOKEN}});
+if(!r.ok){var e=await r.json();throw new Error((e.error&&e.error.message)||"HTTP "+r.status);}
+var d=await r.json();all=all.concat(d.records||[]);off=d.offset||null;
+}while(off);return all;
+}
+async function atOne(tbl,id,fields){
+var fp=fields.map(function(f){return"fields[]="+encodeURIComponent(f);}).join("&");
+var r=await fetch("https://api.airtable.com/v0/"+BASE+"/"+encodeURIComponent(tbl)+"/"+id+"?"+fp,{headers:{Authorization:"Bearer "+TOKEN}});
+if(!r.ok) return null;
+return await r.json();
+}
+async function loadDDT(n){
+var recs=await atFetch(T_DDT,Object.values(F_DDT),"{"+F_DDT.nddt+"}="+n);
+if(!recs.length) throw new Error("DDT n. "+n+" non trovato in Airtable");
+if(!recs[0].cellValuesByFieldId) throw new Error("Record DDT vuoto o malformato");
+var rec=recs[0],df=rec.cellValuesByFieldId||{};
+var righIds=df[F_DDT.righe]||[];
+var righe=[];
+for(var i=0;i<righIds.length;i++){
+var rig=await atOne(T_RIGHE,righIds[i],Object.values(F_RIGA));
+if(!rig) continue;
+var rf=rig.cellValuesByFieldId;
+var codice="";
+var magIds=rf[F_RIGA.mag]||[];
+if(magIds.length){try{var m=await atOne(T_MAG,magIds[0],["fldmT6CqWBnni2CbX"]);if(m)codice=m.cellValuesByFieldId["fldmT6CqWBnni2CbX"]||"";}catch(e){}}
+var descRaw=rf[F_RIGA.desc];
+var desc="";
+if(descRaw&&descRaw.valuesByLinkedRecordId){var vals=Object.values(descRaw.valuesByLinkedRecordId);if(vals.length&&vals[0].length)desc=vals[0][0]||"";}
+else if(Array.isArray(descRaw)&&descRaw.length){desc=descRaw[0]||"";}
+var udmV=rf[F_RIGA.udm];
+righe.push({codice:codice,descrizione:desc,udm:udmV?(udmV.name||udmV):"pz",quantita:rf[F_RIGA.qty]||0,rientrata:rf[F_RIGA.rientrata]||"",in_lab:rf[F_RIGA.in_lab]!=null?rf[F_RIGA.in_lab]:"",note:rf[F_RIGA.note]||""});
+}
+return{numero_ddt:df[F_DDT.nddt]||"",data:df[F_DDT.data]||"",stato:df[F_DDT.status]?(df[F_DDT.status].name||df[F_DDT.status]):"",trasporto:df[F_DDT.trasporto]||"",causale:df[F_DDT.causale]||"Vendita",colli:df[F_DDT.colli]||"",aspetto:df[F_DDT.aspetto]||"",peso:df[F_DDT.peso]||"",destinatario:(df[F_DDT.dest_nome]||[])[0]||"",indirizzo_dest:(df[F_DDT.dest_ind]||[])[0]||"",email_dest:(df[F_DDT.dest_mail]||[])[0]||"",piva_dest:(df[F_DDT.dest_piva]||[])[0]||"",righe:righe};
+}
+function render(o){
+var righe=o.righe||[],tot=0,rH="";
+righe.forEach(function(r,i){var q=r.quantita||0;tot+=q;
+rH+='<tr><td class="ctr">'+(i+1)+'</td><td>'+(r.codice||'')+'</td><td>'+(r.descrizione||'')+'</td><td class="ctr">'+(r.udm||'pz')+'</td><td class="rgt">'+(q||'')+'</td><td class="rgt">'+(r.rientrata||'')+'</td><td class="rgt">'+(r.in_lab!==undefined&&r.in_lab!==''?r.in_lab:'')+'</td><td>'+(r.note||'')+'</td></tr>';
+});
+rH+='<tr class="total-row"><td colspan="4"></td><td class="rgt" style="border-top:2px solid #D6246E">'+tot+'</td><td colspan="3" style="border-top:2px solid #D6246E"></td></tr>';
+document.getElementById('app').innerHTML=
+'<div class="controls"><button class="btn" onclick="window.print()">Stampa / Salva PDF</button> <button class="btn" onclick="window.close()">Chiudi</button></div>'+
+'<div class="page">'+
+'<div class="header"><div class="header-left"><img class="logo-img" src="'+LOGO+'">'+
+'<div><div class="company-name">MYCROCLEAN</div><div class="company-sub">ITALIA\u00ae</div><div class="company-desc">Documento di Trasporto</div></div></div>'+
+'<div class="badge"><div class="badge-label">DDT N\u00b0</div><div class="badge-num">'+(o.numero_ddt||'')+'</div></div></div>'+
+'<div class="meta-row">'+
+'<div class="meta-item"><div class="label">DATA DDT</div><div class="value">'+fD(o.data)+'</div></div>'+
+'<div class="meta-item"><div class="label">STATO</div><div class="value">'+(o.stato||'')+'</div></div>'+
+'<div class="meta-item"><div class="label">TRASPORTO</div><div class="value">'+(o.trasporto||'')+'</div></div>'+
+'<div class="meta-item"><div class="label">N. COLLI</div><div class="value">'+(o.colli||'')+'</div></div>'+
+'<div class="meta-item"><div class="label">ASPETTO COLLI</div><div class="value">'+(o.aspetto||'')+'</div></div>'+
+'<div class="meta-item"><div class="label">PESO</div><div class="value">'+(o.peso||'')+'</div></div>'+
+'</div>'+
+'<div class="three-cols">'+
+'<div class="box box-mitt"><div class="box-label">MITTENTE</div><div class="box-value">Mycroclean Italia\u00ae SRL</div>'+
+'<div class="box-sub">VIA CARLO PORTA, 14 - 20064 GORGONZOLA (MI)</div>'+
+'<div class="box-sub">P.IVA 03702820964</div><div class="box-sub">Tel. 02 95300368 | info@mycroclean.it</div></div>'+
+'<div class="box box-dest"><div class="box-label">DESTINATARIO</div><div class="box-value">'+(o.destinatario||'\u2014')+'</div>'+
+(o.indirizzo_dest?'<div class="box-sub">'+o.indirizzo_dest+'</div>':'')+
+(o.piva_dest?'<div class="box-sub">P.IVA: '+o.piva_dest+'</div>':'')+
+(o.email_dest?'<div class="box-sub">\u2709 '+o.email_dest+'</div>':'')+
+'</div>'+
+'<div class="box box-trasp"><div class="box-label">CAUSALE TRASPORTO</div><div class="box-value">'+(o.causale||'Vendita')+'</div></div>'+
+'</div>'+
+'<div class="section"><div class="dot"></div><span class="section-title">RIGHE DDT</span>'+
+'<table><thead><tr>'+
+'<th class="ctr" style="width:28px">#</th><th style="width:100px">Codice</th><th>Descrizione</th>'+
+'<th class="ctr" style="width:35px">U.M.</th><th class="rgt" style="width:42px">Qt\u00e0</th>'+
+'<th class="rgt" style="width:55px">Rientrata</th><th class="rgt" style="width:45px">In Lab.</th><th>Note</th>'+
+'</tr></thead><tbody>'+rH+'</tbody></table></div>'+
+'<div class="signatures">'+
+'<div class="sig-box"><div class="lbl">Firma mittente</div><div class="sig-line">Mycroclean Italia\u00ae</div></div>'+
+'<div class="sig-box"><div class="lbl">Firma vettore</div><div class="sig-line">Timbro e firma</div></div>'+
+'<div class="sig-box"><div class="lbl">Firma destinatario</div><div class="sig-line">Timbro e firma</div></div>'+
+'</div>'+
+'<div class="footer"><div class="footer-line"></div>'+
+'<div class="footer-text">Mycroclean Italia\u00ae | Via Carlo Porta, 14 - 20064 Gorgonzola (MI) | P.IVA 03702820964 | Tel. 02 95300368 | info@mycroclean.it</div>'+
+'<div class="footer-bar">MYCROCLEAN ITALIA\u00ae</div></div></div>';
+}
+function showForm(){
+document.getElementById('app').innerHTML=
+'<div class="controls" style="min-height:100vh;display:flex;align-items:center;justify-content:center"><div style="text-align:center">'+
+'<img src="'+LOGO+'" style="width:60px;height:60px;border-radius:50%;background:#fff;padding:4px;margin-bottom:14px"><br>'+
+'<h2 style="color:#1B2A4A;margin-bottom:8px">Mycroclean \u2014 DDT</h2>'+
+'<p style="color:#6B7B8D;margin-bottom:14px;font-size:13px">Inserisci il numero DDT:</p>'+
+'<input id="nDDT" type="number" placeholder="Es: 5" style="border:2px solid #D0D8E0;border-radius:8px;padding:10px 16px;font-size:16px;width:180px;text-align:center"><br>'+
+'<button class="btn" style="margin-top:12px" onclick="loadNum()">Carica da Airtable</button>'+
+'</div></div>';
+}
+async function loadNum(){
+var n=document.getElementById('nDDT').value;
+if(!n){alert('Inserisci il numero DDT');return;}
+document.getElementById('app').innerHTML='<div class="spin-wrap"><div class="spinner"></div><p>Caricamento DDT n. '+n+'...</p></div>';
+try{var o=await loadDDT(n);render(o);}
+catch(e){document.getElementById('app').innerHTML='<div class="error-box"><h2>\u274c '+e.message+'</h2></div><div class="controls"><button class="btn" onclick="showForm()">Riprova</button></div>';}
+}
+// compatibilita vecchio sistema b= e data=
+function fromB64(s){s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';try{var b=atob(s);var u=new Uint8Array(b.length);for(var i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return new TextDecoder('utf-8').decode(u);}catch(e){return null;}}
+function expandData(o){if(!o)return null;var righe=(o.r||[]).map(function(row){return{codice:row.c||'',descrizione:row.d||'',udm:row.u||'pz',quantita:row.q||0,rientrata:row.r||'',in_lab:row.l!==undefined?row.l:'',note:row.n||''};});return{numero_ddt:o.n||'',data:o.d||'',stato:o.s||'',trasporto:o.t||'',colli:o.nc||'',aspetto:o.ac||'',peso:o.p||'',destinatario:o.ds||'',indirizzo_dest:o.id||'',email_dest:o.ed||'',piva_dest:o.pv||'',causale:o.ca||'Vendita',righe:righe};}
+(async function(){
+var p=new URLSearchParams(window.location.search);
+var n=p.get('ddt');
+if(n){
+try{var o=await loadDDT(n);render(o);if(p.get('print')==='1')setTimeout(function(){window.print();},800);}
+catch(e){document.getElementById('app').innerHTML='<div class="error-box"><h2>\u274c '+e.message+'</h2></div><div class="controls"><button class="btn" onclick="showForm()">Inserisci manualmente</button></div>';}
+return;
+}
+var b64=p.get('b'),o=null;
+if(b64){try{var js=fromB64(b64);if(js){var raw=JSON.parse(js);o=raw.righe?raw:expandData(raw);}}catch(e){}}
+if(!o){var dp=p.get('data');if(dp){try{o=JSON.parse(decodeURIComponent(dp));}catch(e){try{o=JSON.parse(dp);}catch(e2){}}}}
+if(o){render(o);}else{showForm();}
+})();
+</script>
+</body>
+</html>
