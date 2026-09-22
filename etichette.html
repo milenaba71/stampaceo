@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Etichette · Mycroclean</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jsbarcode/3.11.6/JsBarcode.all.min.js"></script>
+<style>
+  :root{
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+    --bg:#e9edf1;
+    --surface:#ffffff;
+    --ink:#141b26;
+    --muted:#5b6675;
+    --line:#d3dae1;
+    --line-strong:#b7c1cb;
+    --accent:#0e7490;
+    --accent-ink:#ffffff;
+    --accent-soft:#e0f2f5;
+    --danger:#b42318;
+    --shadow:0 1px 2px rgba(20,27,38,.06),0 8px 24px rgba(20,27,38,.06);
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    font-family:"IBM Plex Sans",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    line-height:1.45;
+    -webkit-font-smoothing:antialiased;
+  }
+  .mono{font-family:"IBM Plex Mono","IBM Plex Sans",monospace}
+
+  /* ---- App chrome ---- */
+  header.app{
+    position:sticky;top:0;z-index:20;
+    top:env(safe-area-inset-top,0px);
+    background:var(--ink);color:#eef2f6;
+    border-bottom:3px solid var(--accent);
+  }
+  header.app .row{
+    max-width:1180px;margin:0 auto;padding:14px 20px;
+    display:flex;align-items:center;gap:14px;
+  }
+  .brand{display:flex;align-items:baseline;gap:10px;font-weight:700;letter-spacing:.2px}
+  .brand .tag{
+    font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;
+    color:#8fd3df;border:1px solid #2b6d7c;border-radius:5px;padding:2px 7px;
+  }
+  header.app .spacer{flex:1}
+  .count-pill{
+    font-family:"IBM Plex Mono",monospace;font-size:13px;
+    background:#22303f;border:1px solid #34424f;border-radius:6px;padding:6px 11px;color:#cfe7ec;
+  }
+
+  main{max-width:1180px;margin:0 auto;padding:24px 20px 80px}
+
+  /* ---- Drop zone ---- */
+  .drop{
+    background:var(--surface);border:2px dashed var(--line-strong);border-radius:14px;
+    padding:40px 24px;text-align:center;transition:border-color .15s,background .15s;
+    box-shadow:var(--shadow);
+  }
+  .drop.drag{border-color:var(--accent);background:var(--accent-soft)}
+  .drop h1{margin:0 0 6px;font-size:20px;font-weight:600}
+  .drop p{margin:0 auto;max-width:52ch;color:var(--muted)}
+  .drop .cta{
+    margin-top:20px;display:inline-flex;align-items:center;gap:9px;cursor:pointer;
+    background:var(--accent);color:var(--accent-ink);border:none;border-radius:9px;
+    font:inherit;font-weight:600;font-size:15px;padding:11px 20px;
+  }
+  .drop .cta:hover{background:#0b6076}
+  .drop .hint{margin-top:14px;font-size:12.5px;color:var(--muted)}
+  input[type=file]{display:none}
+
+  /* ---- Layout when loaded ---- */
+  .workspace{display:grid;grid-template-columns:290px 1fr;gap:22px;align-items:start}
+  @media (max-width:820px){.workspace{grid-template-columns:1fr}}
+
+  .panel{
+    background:var(--surface);border:1px solid var(--line);border-radius:12px;
+    box-shadow:var(--shadow);overflow:hidden;position:sticky;top:88px;
+  }
+  @media (max-width:820px){.panel{position:static}}
+  .panel h2{
+    margin:0;padding:13px 16px;font-size:12px;font-weight:600;letter-spacing:.6px;
+    text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--line);
+  }
+  .panel .body{padding:16px}
+  .field{margin-bottom:16px}
+  .field:last-child{margin-bottom:0}
+  .field > label{display:block;font-size:13px;font-weight:600;margin-bottom:7px}
+  .seg{display:flex;border:1px solid var(--line-strong);border-radius:8px;overflow:hidden}
+  .seg button{
+    flex:1;border:none;background:var(--surface);font:inherit;font-size:13px;font-weight:600;
+    padding:8px 0;cursor:pointer;color:var(--muted);border-right:1px solid var(--line)}
+  .seg button:last-child{border-right:none}
+  .seg button.on{background:var(--accent);color:#fff}
+  .num{display:flex;align-items:center;gap:8px}
+  .num input{
+    width:100%;font:inherit;font-size:14px;padding:8px 10px;border:1px solid var(--line-strong);
+    border-radius:8px;background:var(--surface);color:var(--ink)}
+  .num span{font-size:12px;color:var(--muted);white-space:nowrap}
+  .checks{display:grid;gap:9px}
+  .check{display:flex;align-items:center;gap:9px;font-size:13.5px;cursor:pointer;user-select:none}
+  .check input{width:16px;height:16px;accent-color:var(--accent);cursor:pointer}
+  .actions{display:grid;gap:9px;margin-top:4px}
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;
+    font:inherit;font-weight:600;font-size:14px;padding:11px 14px;border-radius:9px;border:1px solid transparent}
+  .btn-print{background:var(--accent);color:#fff}
+  .btn-print:hover{background:#0b6076}
+  .btn-ghost{background:var(--surface);color:var(--ink);border-color:var(--line-strong)}
+  .btn-ghost:hover{background:#f3f6f8}
+
+  /* ---- Preview / sheet ---- */
+  .preview-head{
+    display:flex;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap}
+  .preview-head .lbl{font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.4px;text-transform:uppercase}
+  .sheet{
+    --cols:3;
+    background:var(--surface);border:1px solid var(--line);border-radius:12px;
+    box-shadow:var(--shadow);padding:14px;
+    display:grid;grid-template-columns:repeat(var(--cols),1fr);gap:8px;
+  }
+
+  .label{
+    --h:30mm;
+    border:1px solid #111;border-radius:6px;background:#fff;color:#000;
+    height:var(--h);padding:2.4mm 3mm;display:flex;flex-direction:column;overflow:hidden;
+    break-inside:avoid;
+  }
+  .l-top{display:flex;justify-content:space-between;align-items:flex-start;gap:6px;line-height:1.15}
+  .l-company{font-size:9.5pt;font-weight:700;text-transform:uppercase;letter-spacing:.2px;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .l-size{font-family:"IBM Plex Mono",monospace;font-size:9pt;font-weight:600;
+    border:1.4px solid #000;border-radius:4px;padding:0 5px;line-height:1.5;white-space:nowrap}
+  .l-name{font-size:11pt;font-weight:600;line-height:1.1;margin-top:1mm;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .l-meta{font-size:7.6pt;color:#333;margin-top:.4mm;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .l-code{flex:1;display:flex;align-items:center;justify-content:center;min-height:0;margin-top:.6mm}
+  .l-code svg{max-width:100%;height:100%;display:block}
+  .l-foot{display:flex;justify-content:space-between;align-items:baseline;gap:6px;margin-top:.4mm}
+  .l-num{font-family:"IBM Plex Mono",monospace;font-size:8.4pt;font-weight:600;letter-spacing:.3px}
+  .l-date{font-family:"IBM Plex Mono",monospace;font-size:7.4pt;color:#333;white-space:nowrap}
+
+  .empty-note{color:var(--muted);font-size:13px;padding:20px;text-align:center}
+
+  /* ---- Print ---- */
+  @media print{
+    @page{size:A4;margin:8mm}
+    :root{--bg:#fff}
+    body{background:#fff}
+    header.app,.panel,.preview-head,.drop{display:none !important}
+    main{max-width:none;margin:0;padding:0}
+    .workspace{display:block}
+    .sheet{border:none;border-radius:0;box-shadow:none;padding:0;gap:6px}
+    .label{page-break-inside:avoid}
+  }
+  .hidden{display:none !important}
+</style>
+</head>
+<body>
+<header class="app">
+  <div class="row">
+    <div class="brand">Etichette <span class="tag">MYCROCLEAN</span></div>
+    <div class="spacer"></div>
+    <div id="count" class="count-pill hidden">0 etichette</div>
+  </div>
+</header>
+
+<main>
+  <!-- Drop / upload -->
+  <section id="drop" class="drop">
+    <h1>Trascina qui l'export CSV</h1>
+    <p>Prendo i codici dei prodotti e li trasformo in etichette con codice a barre, pronte da stampare. Il file resta nel tuo browser: niente viene caricato online.</p>
+    <button class="cta" id="pick">Scegli il file CSV</button>
+    <input type="file" id="file" accept=".csv,text/csv">
+    <div class="hint">Formato atteso: export prodotti Mycroclean (separatore «;»)</div>
+  </section>
+
+  <!-- Workspace -->
+  <div id="workspace" class="workspace hidden">
+    <aside class="panel">
+      <h2>Impostazioni</h2>
+      <div class="body">
+        <div class="field">
+          <label>Etichette per riga</label>
+          <div class="seg" id="cols">
+            <button data-v="2">2</button>
+            <button data-v="3" class="on">3</button>
+            <button data-v="4">4</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Altezza etichetta</label>
+          <div class="num">
+            <input type="number" id="height" value="30" min="18" max="60" step="1">
+            <span>mm</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Copie per prodotto</label>
+          <div class="num">
+            <input type="number" id="copies" value="1" min="1" max="20" step="1">
+            <span>× ciascuna</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Dati sull'etichetta</label>
+          <div class="checks" id="fields">
+            <label class="check"><input type="checkbox" data-f="company" checked> Azienda</label>
+            <label class="check"><input type="checkbox" data-f="name" checked> Nome / iniziali</label>
+            <label class="check"><input type="checkbox" data-f="reparto" checked> Reparto</label>
+            <label class="check"><input type="checkbox" data-f="tipo" checked> Tipo capo</label>
+            <label class="check"><input type="checkbox" data-f="size" checked> Taglia</label>
+            <label class="check"><input type="checkbox" data-f="date" checked> Data</label>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn btn-print" id="print">Stampa etichette</button>
+          <button class="btn btn-ghost" id="reset">Carica un altro file</button>
+        </div>
+      </div>
+    </aside>
+
+    <section>
+      <div class="preview-head">
+        <span class="lbl">Anteprima</span>
+        <span id="fileName" class="mono" style="font-size:13px;color:var(--muted)"></span>
+      </div>
+      <div id="sheet" class="sheet"></div>
+    </section>
+  </div>
+</main>
+
+<script>
+(function(){
+  "use strict";
+
+  // ---------- CSV parsing (handles ; or , and quoted fields) ----------
+  function detectDelimiter(text){
+    const line = text.split(/\r?\n/)[0] || "";
+    const semi = (line.match(/;/g)||[]).length;
+    const comma = (line.match(/,/g)||[]).length;
+    return semi >= comma ? ";" : ",";
+  }
+  function parseCSV(text, delim){
+    const rows=[]; let field="",row=[],inQ=false;
+    for(let i=0;i<text.length;i++){
+      const c=text[i];
+      if(inQ){
+        if(c==='"'){ if(text[i+1]==='"'){field+='"';i++;} else inQ=false; }
+        else field+=c;
+      }else{
+        if(c==='"') inQ=true;
+        else if(c===delim){ row.push(field); field=""; }
+        else if(c==='\n'){ row.push(field); rows.push(row); field=""; row=[]; }
+        else if(c==='\r'){ /* skip */ }
+        else field+=c;
+      }
+    }
+    if(field.length||row.length){ row.push(field); rows.push(row); }
+    return rows.filter(r=>r.some(v=>v!==""&&v!=null));
+  }
+
+  // ---------- State ----------
+  let records=[];      // array of objects keyed by header
+  const state={cols:3, height:30, copies:1,
+    fields:{company:true,name:true,reparto:true,tipo:true,size:true,date:true}};
+
+  const $=s=>document.querySelector(s);
+  const drop=$("#drop"), workspace=$("#workspace"), sheet=$("#sheet");
+  const countEl=$("#count"), fileNameEl=$("#fileName");
+
+  // ---------- File handling ----------
+  $("#pick").addEventListener("click",()=>$("#file").click());
+  $("#file").addEventListener("change",e=>{ if(e.target.files[0]) readFile(e.target.files[0]); });
+  ["dragenter","dragover"].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add("drag");}));
+  ["dragleave","drop"].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove("drag");}));
+  drop.addEventListener("drop",e=>{ const f=e.dataTransfer.files[0]; if(f) readFile(f); });
+
+  function readFile(file){
+    fileNameEl.textContent=file.name;
+    const r=new FileReader();
+    r.onload=()=>{ ingest(r.result); };
+    r.onerror=()=>alert("Non riesco a leggere il file. Riprova con un CSV.");
+    r.readAsText(file,"utf-8");
+  }
+
+  function ingest(text){
+    const delim=detectDelimiter(text);
+    const rows=parseCSV(text,delim);
+    if(rows.length<2){ alert("Il file non contiene righe di dati."); return; }
+    const headers=rows[0].map(h=>h.trim().toUpperCase());
+    records=rows.slice(1).map(r=>{
+      const o={}; headers.forEach((h,i)=>o[h]=(r[i]||"").trim()); return o;
+    }).filter(o=>get(o,"CODICE"));
+    if(!records.length){ alert("Non ho trovato la colonna CODICE con dei valori."); return; }
+    drop.classList.add("hidden");
+    workspace.classList.remove("hidden");
+    countEl.classList.remove("hidden");
+    render();
+  }
+
+  function get(o,key){ return o[key]!=null ? o[key] : ""; }
+
+  // ---------- Controls ----------
+  $("#cols").addEventListener("click",e=>{
+    const b=e.target.closest("button"); if(!b) return;
+    state.cols=+b.dataset.v;
+    $("#cols").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));
+    applyLayout();
+  });
+  $("#height").addEventListener("input",e=>{ state.height=clamp(+e.target.value||30,18,60); applyLayout(); });
+  $("#copies").addEventListener("input",e=>{ state.copies=clamp(+e.target.value||1,1,20); render(); });
+  $("#fields").addEventListener("change",e=>{
+    const f=e.target.dataset.f; if(!f) return;
+    state.fields[f]=e.target.checked; render();
+  });
+  $("#print").addEventListener("click",()=>window.print());
+  $("#reset").addEventListener("click",()=>{
+    records=[]; $("#file").value="";
+    workspace.classList.add("hidden"); countEl.classList.add("hidden");
+    drop.classList.remove("hidden"); sheet.innerHTML="";
+  });
+  function clamp(n,a,b){ return Math.max(a,Math.min(b,n)); }
+
+  function applyLayout(){
+    sheet.style.setProperty("--cols",state.cols);
+    document.querySelectorAll(".label").forEach(l=>l.style.setProperty("--h",state.height+"mm"));
+  }
+
+  // ---------- Render labels ----------
+  function render(){
+    sheet.innerHTML="";
+    let total=0;
+    records.forEach(rec=>{
+      for(let c=0;c<state.copies;c++){ sheet.appendChild(buildLabel(rec)); total++; }
+    });
+    applyLayout();
+    countEl.textContent = total + (total===1?" etichetta":" etichette");
+    // barcodes
+    sheet.querySelectorAll("svg[data-code]").forEach(svg=>{
+      try{
+        JsBarcode(svg,svg.dataset.code,{
+          format:"CODE128", displayValue:false, margin:0,
+          width:1.5, height:60, background:"transparent", lineColor:"#000"
+        });
+      }catch(err){ /* invalid code -> leave empty */ }
+    });
+  }
+
+  function esc(s){ return (s||"").replace(/[&<>]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[m])); }
+
+  function buildLabel(rec){
+    const code=get(rec,"CODICE");
+    const company=get(rec,"AZIENDA")||get(rec,"REPARTO");
+    let name=get(rec,"NOME E COGNOME"); if(!name) name=get(rec,"INIZIALI");
+    const reparto=get(rec,"REPARTO");
+    const tipo=get(rec,"TIPO");
+    const size=get(rec,"TAGLIA");
+    const date=get(rec,"DATA");
+    const f=state.fields;
+
+    const meta=[f.reparto?reparto:"", f.tipo?tipo:""].filter(Boolean).join(" · ");
+
+    const el=document.createElement("div");
+    el.className="label";
+    el.style.setProperty("--h",state.height+"mm");
+    el.innerHTML=`
+      <div class="l-top">
+        <div class="l-company">${f.company?esc(company):""}</div>
+        ${f.size&&size?`<div class="l-size">${esc(size)}</div>`:""}
+      </div>
+      ${f.name&&name?`<div class="l-name">${esc(name)}</div>`:""}
+      ${meta?`<div class="l-meta">${esc(meta)}</div>`:""}
+      <div class="l-code"><svg data-code="${esc(code)}"></svg></div>
+      <div class="l-foot">
+        <span class="l-num">${esc(code)}</span>
+        ${f.date&&date?`<span class="l-date">${esc(date)}</span>`:""}
+      </div>`;
+    return el;
+  }
+})();
+</script>
+</body>
+</html>
