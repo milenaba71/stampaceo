@@ -118,6 +118,24 @@
   .btn-ghost{background:var(--surface);color:var(--ink);border-color:var(--line-strong)}
   .btn-ghost:hover{background:#f3f6f8}
 
+  /* ---- Logo uploader (panel) ---- */
+  .logo-pick{
+    display:flex;align-items:center;gap:10px;width:100%;cursor:pointer;
+    border:1px dashed var(--line-strong);border-radius:9px;background:var(--surface);
+    padding:10px 12px;font:inherit;font-size:13px;color:var(--muted);text-align:left}
+  .logo-pick:hover{border-color:var(--accent);color:var(--ink)}
+  .logo-pick svg{flex:0 0 auto}
+  .logo-box{
+    display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:9px;
+    padding:8px;background:#f7f9fb}
+  .logo-box img{
+    width:52px;height:52px;object-fit:contain;background:#fff;border:1px solid var(--line);
+    border-radius:6px;padding:3px;flex:0 0 auto}
+  .logo-box .meta{flex:1;min-width:0}
+  .logo-box .meta .nm{font-size:12.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .logo-box .meta .rm{font-size:12px;color:var(--danger);cursor:pointer;background:none;border:none;padding:2px 0;font:inherit}
+  .logo-box .meta .rm:hover{text-decoration:underline}
+
   /* ---- Preview / sheet ---- */
   .preview-head{
     display:flex;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap}
@@ -131,19 +149,24 @@
 
   .label{
     --h:30mm;
+    --logo-h:6mm;
     border:1px solid #111;border-radius:6px;background:#fff;color:#000;
     height:var(--h);padding:2.4mm 3mm;display:flex;flex-direction:column;overflow:hidden;
     break-inside:avoid;
   }
   .l-top{display:flex;justify-content:space-between;align-items:flex-start;gap:6px;line-height:1.15}
+  .l-left{display:flex;align-items:center;gap:1.6mm;min-width:0}
+  .l-logo{max-height:var(--logo-h);max-width:18mm;object-fit:contain;display:block;flex:0 0 auto}
   .l-company{font-size:9.5pt;font-weight:700;text-transform:uppercase;letter-spacing:.2px;
     white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .l-size{font-family:"IBM Plex Mono",monospace;font-size:9pt;font-weight:600;
-    border:1.4px solid #000;border-radius:4px;padding:0 5px;line-height:1.5;white-space:nowrap}
+    border:1.4px solid #000;border-radius:4px;padding:0 5px;line-height:1.5;white-space:nowrap;flex:0 0 auto}
   .l-name{font-size:11pt;font-weight:600;line-height:1.1;margin-top:1mm;
     white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .l-meta{font-size:7.6pt;color:#333;margin-top:.4mm;
     white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .l-logo-center{display:flex;justify-content:center;margin-top:.8mm}
+  .l-logo-center img{max-height:var(--logo-h);max-width:70%;object-fit:contain;display:block}
   .l-code{flex:1;display:flex;align-items:center;justify-content:center;min-height:0;margin-top:.6mm}
   .l-code svg{max-width:100%;height:100%;display:block}
   .l-foot{display:flex;justify-content:space-between;align-items:baseline;gap:6px;margin-top:.4mm}
@@ -162,6 +185,7 @@
     .workspace{display:block}
     .sheet{border:none;border-radius:0;box-shadow:none;padding:0;gap:6px}
     .label{page-break-inside:avoid}
+    .l-logo,.l-logo-center img{-webkit-print-color-adjust:exact;print-color-adjust:exact}
   }
   .hidden{display:none !important}
 </style>
@@ -212,6 +236,38 @@
           <div class="num">
             <input type="number" id="copies" value="1" min="1" max="20" step="1">
             <span>× ciascuna</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Immagine / logo</label>
+          <button class="logo-pick" id="logoPick">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            <span>Carica dal dispositivo…</span>
+          </button>
+          <input type="file" id="logoFile" accept="image/*">
+          <div id="logoBox" class="logo-box hidden" style="margin-top:9px">
+            <img id="logoThumb" alt="logo">
+            <div class="meta">
+              <div class="nm" id="logoName">logo</div>
+              <button class="rm" id="logoRemove">Rimuovi</button>
+            </div>
+          </div>
+          <div id="logoOpts" class="hidden">
+            <div style="margin-top:12px">
+              <label style="display:block;font-size:13px;font-weight:600;margin-bottom:7px">Posizione logo</label>
+              <div class="seg" id="logoPos">
+                <button data-v="header" class="on">In alto</button>
+                <button data-v="center">Sopra codice</button>
+              </div>
+            </div>
+            <div style="margin-top:12px">
+              <label style="display:block;font-size:13px;font-weight:600;margin-bottom:7px">Dimensione logo</label>
+              <div class="num">
+                <input type="number" id="logoH" value="6" min="3" max="16" step="0.5">
+                <span>mm alt.</span>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -277,6 +333,7 @@
   // ---------- State ----------
   let records=[];      // array of objects keyed by header
   const state={cols:3, height:30, copies:1,
+    logo:null, logoPos:"header", logoH:6,
     fields:{company:true,name:true,reparto:true,tipo:true,size:true,date:true}};
 
   const $=s=>document.querySelector(s);
@@ -315,6 +372,37 @@
 
   function get(o,key){ return o[key]!=null ? o[key] : ""; }
 
+  // ---------- Logo handling ----------
+  $("#logoPick").addEventListener("click",()=>$("#logoFile").click());
+  $("#logoFile").addEventListener("change",e=>{
+    const f=e.target.files[0]; if(!f) return;
+    if(!f.type.startsWith("image/")){ alert("Scegli un file immagine (PNG, JPG, SVG…)."); return; }
+    const r=new FileReader();
+    r.onload=()=>{
+      state.logo=r.result;
+      $("#logoThumb").src=r.result;
+      $("#logoName").textContent=f.name;
+      $("#logoBox").classList.remove("hidden");
+      $("#logoOpts").classList.remove("hidden");
+      render();
+    };
+    r.onerror=()=>alert("Non riesco a leggere l'immagine.");
+    r.readAsDataURL(f);
+  });
+  $("#logoRemove").addEventListener("click",()=>{
+    state.logo=null; $("#logoFile").value="";
+    $("#logoBox").classList.add("hidden");
+    $("#logoOpts").classList.add("hidden");
+    render();
+  });
+  $("#logoPos").addEventListener("click",e=>{
+    const b=e.target.closest("button"); if(!b) return;
+    state.logoPos=b.dataset.v;
+    $("#logoPos").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));
+    render();
+  });
+  $("#logoH").addEventListener("input",e=>{ state.logoH=clamp(+e.target.value||6,3,16); applyLayout(); });
+
   // ---------- Controls ----------
   $("#cols").addEventListener("click",e=>{
     const b=e.target.closest("button"); if(!b) return;
@@ -338,7 +426,10 @@
 
   function applyLayout(){
     sheet.style.setProperty("--cols",state.cols);
-    document.querySelectorAll(".label").forEach(l=>l.style.setProperty("--h",state.height+"mm"));
+    document.querySelectorAll(".label").forEach(l=>{
+      l.style.setProperty("--h",state.height+"mm");
+      l.style.setProperty("--logo-h",state.logoH+"mm");
+    });
   }
 
   // ---------- Render labels ----------
@@ -362,6 +453,7 @@
   }
 
   function esc(s){ return (s||"").replace(/[&<>]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[m])); }
+  function escAttr(s){ return (s||"").replace(/"/g,"&quot;").replace(/[&<>]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[m])); }
 
   function buildLabel(rec){
     const code=get(rec,"CODICE");
@@ -372,20 +464,28 @@
     const size=get(rec,"TAGLIA");
     const date=get(rec,"DATA");
     const f=state.fields;
+    const hasLogo=!!state.logo;
+    const logoHeader = hasLogo && state.logoPos==="header";
+    const logoCenter = hasLogo && state.logoPos==="center";
 
     const meta=[f.reparto?reparto:"", f.tipo?tipo:""].filter(Boolean).join(" · ");
 
     const el=document.createElement("div");
     el.className="label";
     el.style.setProperty("--h",state.height+"mm");
+    el.style.setProperty("--logo-h",state.logoH+"mm");
     el.innerHTML=`
       <div class="l-top">
-        <div class="l-company">${f.company?esc(company):""}</div>
+        <div class="l-left">
+          ${logoHeader?`<img class="l-logo" src="${escAttr(state.logo)}" alt="">`:""}
+          <span class="l-company">${f.company?esc(company):""}</span>
+        </div>
         ${f.size&&size?`<div class="l-size">${esc(size)}</div>`:""}
       </div>
       ${f.name&&name?`<div class="l-name">${esc(name)}</div>`:""}
       ${meta?`<div class="l-meta">${esc(meta)}</div>`:""}
-      <div class="l-code"><svg data-code="${esc(code)}"></svg></div>
+      ${logoCenter?`<div class="l-logo-center"><img src="${escAttr(state.logo)}" alt=""></div>`:""}
+      <div class="l-code"><svg data-code="${escAttr(code)}"></svg></div>
       <div class="l-foot">
         <span class="l-num">${esc(code)}</span>
         ${f.date&&date?`<span class="l-date">${esc(date)}</span>`:""}
