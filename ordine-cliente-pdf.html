@@ -59,10 +59,26 @@ tbody tr:nth-child(even){background:#F0F4F8}
 <div id="app"><div style="text-align:center;padding:60px;color:#6B7B8D">Caricamento...</div></div>
 <script>
 var LOGO="https://milenaba71.github.io/stampaceo/logo%20mycroclean.png";
-var params=new URLSearchParams(window.location.search);
-var dp=params.get('data');var o=null;
-if(dp){try{o=JSON.parse(decodeURIComponent(dp))}catch(e){try{o=JSON.parse(dp)}catch(e2){}}}
-if(!o){document.getElementById('app').innerHTML='<div class="controls" style="min-height:100vh;display:flex;align-items:center;justify-content:center"><div style="text-align:center"><img src="'+LOGO+'" style="width:50px;border-radius:50%;margin-bottom:14px"><h2 style="color:#1B2A4A;margin-bottom:8px">Mycroclean \u2014 Ordine Cliente</h2><p style="color:#6B7B8D;margin-bottom:14px;font-size:13px">Incolla il JSON:</p><textarea id="ji" style="width:400px;height:200px;border:2px solid #D0D8E0;border-radius:8px;padding:10px;font-size:11px;font-family:monospace;resize:vertical"></textarea><br><button class="btn" style="margin-top:10px" onclick="loadJ()">Carica</button></div></div>'}else{render(o);if(params.get('print')==='1')setTimeout(function(){window.print()},600)}
+// legge un parametro sia da ?query sia da #hash (il #hash NON viene inviato al server: niente errore 414 "URI Too Long")
+function qp(name){
+  var v=new URLSearchParams(window.location.search).get(name);
+  if(v!=null) return v;
+  var h=window.location.hash||''; if(h.charAt(0)==='#') h=h.slice(1);
+  return new URLSearchParams(h).get(name);
+}
+// decodifica base64url -> stringa UTF-8
+function b64urlToStr(s){
+  s=String(s).replace(/-/g,'+').replace(/_/g,'/'); while(s.length%4) s+='=';
+  var bin=atob(s);
+  try{ return decodeURIComponent(Array.prototype.map.call(bin,function(c){return '%'+('00'+c.charCodeAt(0).toString(16)).slice(-2)}).join('')); }
+  catch(e){ return bin; }
+}
+var o=null;
+var bp=qp('b');      // dati compatti (base64url del JSON)
+var dp=qp('data');   // dati JSON "in chiaro" (compatibilit\u00e0 con il vecchio formato)
+if(bp){ try{ o=JSON.parse(b64urlToStr(bp)); }catch(e){} }
+if(!o && dp){ try{ o=JSON.parse(decodeURIComponent(dp)); }catch(e){ try{ o=JSON.parse(dp); }catch(e2){} } }
+if(!o){document.getElementById('app').innerHTML='<div class="controls" style="min-height:100vh;display:flex;align-items:center;justify-content:center"><div style="text-align:center"><img src="'+LOGO+'" style="width:50px;border-radius:50%;margin-bottom:14px"><h2 style="color:#1B2A4A;margin-bottom:8px">Mycroclean \u2014 Ordine Cliente</h2><p style="color:#6B7B8D;margin-bottom:14px;font-size:13px">Incolla il JSON:</p><textarea id="ji" style="width:400px;height:200px;border:2px solid #D0D8E0;border-radius:8px;padding:10px;font-size:11px;font-family:monospace;resize:vertical"></textarea><br><button class="btn" style="margin-top:10px" onclick="loadJ()">Carica</button></div></div>'}else{render(o);if(qp('print')==='1')setTimeout(function(){window.print()},600)}
 function loadJ(){try{o=JSON.parse(document.getElementById('ji').value);render(o)}catch(e){alert('JSON non valido')}}
 function fD(d){if(!d)return'\u2014';try{return new Date(d).toLocaleDateString('it-IT',{day:'2-digit',month:'2-digit',year:'numeric'})}catch(e){return String(d)}}
 function render(o){
